@@ -1,3 +1,4 @@
+#tutorial/settings.py
 """
 Django settings for tutorial project.
 
@@ -28,15 +29,20 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+
 # Application definition
 
 INSTALLED_APPS = [
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tutorial',
+    
 ]
 
 MIDDLEWARE = [
@@ -75,10 +81,18 @@ WSGI_APPLICATION = 'tutorial.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cliente',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
     }
 }
+
+LOGIN_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URC='/login/'
+LOGIN_URL='/login/'
+
 
 
 # Password validation

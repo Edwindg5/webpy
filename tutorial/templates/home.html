@@ -2,6 +2,11 @@
 
 {% block content %}
 <p>{{ my_name }}</p>
-<ul>{% for item in lista %}<li>{{ item }}</li>{% endfor %}</ul>
+<ul>{% for item in lista %}<li>{{ item }}
+    <a href="{% url 'carreras_editar' item.pk %}">Editar</a>
+    <a href="{% url 'carreras_eliminar' item.pk %}">Eliminar</a>
+    
+</li>{% endfor %}</ul>
 <h1>Hola soy la pagina de inicio</h1>
+<a href="{% url 'carreras' %}">Crear carrera</a>
 {% endblock content %}

@@ -1,3 +1,4 @@
+#tutorial/urls.py
 """
 URL configuration for tutorial project.
 
@@ -15,13 +16,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path
 from tutorial import view
-from tutorial.view import HomePageView,AboutPageView
+from tutorial.view import HomePageView,AboutPageView,CarreraCreateViewPage,CarreraEditViewPage,  CarreraDeleteViewPage
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('', view.index, name='index'),
     path('', HomePageView.as_view(), name='home'),
     path('about/', AboutPageView.as_view(), name='about'),
+    path('carreras/', CarreraCreateViewPage.as_view(), name='carreras'),
+    path("carreras/editar/<int:pk>/", CarreraEditViewPage.as_view(), name="carreras_editar"),
+    path("carreras/eliminar/<int:pk>/", CarreraDeleteViewPage.as_view(), name="carreras_eliminar"),
+    path('login/',auth_views.LoginView.as_view(template_name="login.html"),name='login'),
+    path('logout/',auth_views.LogoutView.as_view(template_name="login.html"), name= 'logout'),
 ]

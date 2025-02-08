@@ -1,0 +1,13 @@
+###carreras_form.html
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Formulario de carreras</h1>
+<h2>Crear carreras</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+</form>
+
+{% endblock content %}
