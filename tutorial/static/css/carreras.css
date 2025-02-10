@@ -1,0 +1,90 @@
+/* Contenedor principal */
+.carreras-container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.66);
+    padding: 100px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(2, 2, 2, 0.689);
+    width: 200%;  /* Aumenta el ancho */
+    max-width: 1200px; /* Controla que no se pase de una medida máxima */
+    margin: 50px auto;
+}
+
+/* Título */
+h1 {
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Título */
+.title-lista {
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+/* Lista de carreras en formato tabla */
+.carreras-container ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.carreras-container li {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 5px;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px; /* Texto más grande */
+    font-weight: bold;
+}
+
+/* Enlaces de editar y eliminar */
+.carreras-container li a {
+    margin-left: 20px;
+    color: rgb(0, 203, 51);
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.carreras-container li a:hover {
+    text-decoration: underline;
+}
+
+/* Botón para crear carreras */
+.btn {
+    display: block;
+    width: 100%; /* Ocupa todo el ancho */
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background-color: yellow;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 22px;
+    text-align: center;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background-color: orange;
+}
+
+/* Ajustes para que la tabla ocupe toda la pantalla */
+@media (min-width: 768px) {
+    .carreras-container {
+        width: 95%;
+        max-width: 1400px;
+    }
+}

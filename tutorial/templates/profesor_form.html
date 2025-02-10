@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registrar Profesor{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/profesor_form.css' %}">
+
+<div class="form-container">
+    <h1>Registrar Profesor</h1>
+
+    <form id="profesor-form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.nombre.label_tag }}
+            {{ form.nombre }}
+        </div>
+        <div class="form-group">
+            {{ form.apellido.label_tag }}
+            {{ form.apellido }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            {{ form.telefono.label_tag }}
+            {{ form.telefono }}
+        </div>
+        <div class="form-group">
+            {{ form.especialidad.label_tag }}
+            {{ form.especialidad }}
+        </div>
+        <button type="submit" class="btn-submit">Guardar</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("profesor-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Se guardará el nuevo profesor en la base de datos.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#007bff",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, guardar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch("", {
+                    method: "POST",
+                    body: new FormData(document.getElementById("profesor-form")),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire("Guardado", "El profesor ha sido registrado exitosamente.", "success");
+                    document.getElementById("profesor-form").reset();
+                })
+                .catch(error => {
+                    Swal.fire("Error", "Hubo un problema al guardar el profesor.", "error");
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock content %}

@@ -1,13 +1,47 @@
-###carreras_form.html
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Formulario de carreras</h1>
-<h2>Crear carreras</h2>
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
+<link rel="stylesheet" href="{% static 'css/carreras_form.css' %}">
 
+<div class="form-container">
+    <h1>Agregar Nueva Carrera</h1>
+
+    <form id="carrera-form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.nombre.label_tag }}
+            {{ form.nombre }}
+        </div>
+        <div class="form-group">
+            {{ form.descripcion.label_tag }}
+            {{ form.descripcion }}
+        </div>
+        <button type="submit" class="btn-submit">Guardar</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("carrera-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Se guardará la nueva carrera en la base de datos.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#007bff",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, guardar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        });
+    });
+});
+</script>
 {% endblock content %}

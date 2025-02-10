@@ -1,32 +1,56 @@
 #tutorial/views.py
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
 from .models import Carrera
+from django.views import View
 from .vistas import CarreraForm
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
+from tutorial.forms.profesor_form import ProfesorForm
+from tutorial.models.profesor import Profesor
+from tutorial.forms.empresa_form import EmpresaForm
+from tutorial.models import Empresa
+from django.views.generic import ListView
+from tutorial.models.empresa import Empresa
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls ollaaa.")
 
 class HomePageView(TemplateView):
     template_name = 'home.html'
-    model = Carrera
+
     def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
-        context['my_name'] = ''
-        context["lista"] = self.model.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['my_name'] = 'Bienvenido a la plataforma de Carreras'
+        context["lista"] = Carrera.objects.all()  # Se usa Carrera.objects.all()
         return context
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+class ProfesorCreateView(TemplateView):
+    template_name = "profesor_form.html"
+
+    def get(self, request, *args, **kwargs):
+        form = ProfesorForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = ProfesorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"success": True, "message": "Profesor registrado correctamente."})
+        return JsonResponse({"success": False, "message": "Error al registrar el profesor."}, status=400)
+
 
     
 class AboutPageView(TemplateView):
     template_name = 'about.html'
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["lista"] = Carrera.objects.all()  # Ahora se envían las carreras a about.html
+        return context
+
 
 class CarreraCreateViewPage(TemplateView):
     template_name = 'carreras_form.html'
@@ -62,12 +86,37 @@ class CarreraEditViewPage(TemplateView):
         else:
             return render(request, 'carreras_form.html', {'form': form})
 
-class CarreraDeleteViewPage(TemplateView):
-    template_name = 'carreras_form.html'
-    def get(self, request, pk, *args, **kwargs):
-        carrera=get_object_or_404(Carrera, pk=pk)
-        forms = CarreraForm(instance=carrera)
+class CarreraDeleteViewPage(View):
+    def post(self, request, pk, *args, **kwargs):
+        carrera = get_object_or_404(Carrera, pk=pk)
         carrera.delete()
-        return redirect('/')
+        return JsonResponse({"success": True, "message": "Carrera eliminada correctamente."})
     
     
+    
+    
+class EmpresaCreateView(View):
+    template_name = "empresa_form.html"
+
+    def get(self, request):
+        form = EmpresaForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = EmpresaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('ver_empresa')  # Redirige a la lista de empresas
+        else:
+            return render(request, self.template_name, {'form': form, 'errors': form.errors})
+        
+class EmpresaListView(ListView):
+    model = Empresa
+    template_name = "empresa.html"
+    context_object_name = "empresas"
+    
+class EmpresaDeleteView(View):
+    def post(self, request, pk):
+        empresa = get_object_or_404(Empresa, pk=pk)
+        empresa.delete()
+        return JsonResponse({"success": True, "message": "Empresa eliminada correctamente."})

@@ -1,19 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hola{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'estilo.css' %}">
+</head>
+<body>
 
-<html>
-    <head>
-        {% load static %}
-        <title>Hola</title>
-        <link rel="stylesheet" href="{% static 'estilo.css' %}">
-    </head>
-    <body>
-        <header>
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'about' %}">About</a>
-        </header>
+    <header>
+        <nav class="nav-bar">
+            <div class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'about' %}">Carreras</a>
+            </div>
+            <div class="nav-buttons">
+                <a href="{% url 'carreras' %}" class="btn-header">Crear Nueva Carrera</a>
+                <a href="{% url 'crear_profesor' %}" class="btn-profesor">Crear Usuario de Profesor</a>
+                <a href="{% url 'login' %}" class="btn-login-header">Iniciar Sesión</a>
+            </div>
+        </nav>
+    </header>
+    
 
-        <img src="{% static 'image.png' %}" alt="Imagen">
-
+    <div class="content">
         {% block content %}
         {% endblock content %}
-    </body>
+    </div>
+
+</body>
 </html>

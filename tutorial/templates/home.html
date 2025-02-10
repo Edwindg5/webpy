@@ -1,12 +1,77 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
 
 {% block content %}
-<p>{{ my_name }}</p>
-<ul>{% for item in lista %}<li>{{ item }}
-    <a href="{% url 'carreras_editar' item.pk %}">Editar</a>
-    <a href="{% url 'carreras_eliminar' item.pk %}">Eliminar</a>
-    
-</li>{% endfor %}</ul>
-<h1>Hola soy la pagina de inicio</h1>
-<a href="{% url 'carreras' %}">Crear carrera</a>
+
+
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1>Bienvenido a la Sala Navigator</h1>
+    <p>
+        Registra las empresas con convenios que tengas.
+    </p>
+    <div class="buttons">
+        <a href="{% url 'ver_empresa' %}">
+            <button class="btn-white">Ver Empresas</button>
+        </a>
+        
+        <a href="{% url 'registrar_empresa' %}" class="btn-dark">Registra tu Empresa</a>
+
+    </div>
+    <p class="small-text">Debes de iniciar sesion para registrar tu empresa, en  la parte superior derecha se encuntra el boton de iniciar sesion</p>
+</section>
+
+<!-- Info Sections -->
+<section class="info-sections">
+    <div class="info-box">
+        <h3>Segmentar</h3>
+        <p>Encuentra a las empresas y a las personas adecuadas.</p>
+    </div>
+    <div class="info-box">
+        <h3>Entender</h3>
+        <p>Acompaña actualizaciones importantes de empresas y posibles clientes.</p>
+    </div>
+    <div class="info-box">
+        <h3>Interactuar</h3>
+        <p>Comunícate e interactúa con tus posibles clientes.</p>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials">
+    <h2>Lo que dicen nuestros usuarios</h2>
+    <p class="subtext">Testimonios de clientes que han potenciado su negocio con Sales Navigator.</p>
+    <div class="testimonial-cards">
+        <div class="testimonial-card">
+            <p>"Sales Navigator ha sido clave en nuestra estrategia de ventas, nos ha permitido encontrar clientes más fácilmente."</p>
+            <h4>— Juan Pérez, CEO de Empresa X</h4>
+        </div>
+        <div class="testimonial-card">
+            <p>"Con LinkedIn Sales Navigator hemos incrementado nuestra tasa de conversión en un 30%."</p>
+            <h4>— María López, Directora de Ventas</h4>
+        </div>
+        <div class="testimonial-card">
+            <p>"Nos ha permitido contactar con clientes de alto perfil que antes parecían inalcanzables."</p>
+            <h4>— Carlos Ramírez, Gerente de Desarrollo</h4>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <h2>¿Listo para mejorar tus ventas?</h2>
+    <p>Prueba Registrar tu Empresa</p>
+    <button>Empezar ahora</button>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>© 2025 Up Chiapas. Todos los derechos reservados.</p>
+</footer>
+
 {% endblock content %}

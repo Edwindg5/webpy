@@ -1,4 +1,69 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Carreras{% endblock title %}
+
 {% block content %}
-<h1>Hola soy la pagina acerca de</h1>
+<link rel="stylesheet" href="{% static 'css/carreras.css' %}?v=2">
+
+
+<h1 class="title-lista">Lista de Carreras Registradas</h1>
+
+<div class="carreras-container">
+    <ul>
+        {% for item in lista %}
+            <li>{{ item }}
+                <a href="{% url 'carreras_editar' item.pk %}">Editar</a>
+                <a href="#" class="eliminar-carrera" data-url="{% url 'carreras_eliminar' item.pk %}" data-id="{{ item.pk }}">Eliminar</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".eliminar-carrera").forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+                let deleteUrl = this.getAttribute("data-url");
+                let listItem = this.closest("li");
+                
+                Swal.fire({
+                    title: "¿Estás seguro?",
+                    text: "Esta acción eliminará la carrera de forma permanente.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#007bff",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(deleteUrl, {
+                            method: "POST",
+                            headers: {
+                                "X-CSRFToken": "{{ csrf_token }}",
+                                "Content-Type": "application/json"
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire("Eliminado", data.message, "success");
+                                listItem.remove(); // Elimina la carrera de la lista
+                            } else {
+                                Swal.fire("Error", "No se pudo eliminar la carrera.", "error");
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "Hubo un problema al eliminar la carrera.", "error");
+                        });
+                    }
+                });
+            });
+        });
+    });
+    </script>
+    
 {% endblock %}

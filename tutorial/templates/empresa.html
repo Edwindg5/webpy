@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/empresa.css' %}">
+</head>
+
+<div class="container">
+    <h2>Lista de Empresas Registradas</h2>
+
+    <table class="empresa-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Sitio Web</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for empresa in empresas %}
+            <tr id="empresa-{{ empresa.id }}">
+                <td>{{ empresa.nombre }}</td>
+                <td>{{ empresa.email }}</td>
+                <td>{{ empresa.telefono }}</td>
+                <td>{{ empresa.direccion }}</td>
+                <td>
+                    {% if empresa.sitio_web %}
+                        <a href="{{ empresa.sitio_web }}" target="_blank">Visitar</a>
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="delete-btn" data-id="{{ empresa.id }}">❌ Eliminar</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- CSRF Token oculto para JavaScript -->
+    <form id="csrf-form">{% csrf_token %}</form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let empresaId = this.getAttribute("data-id");
+            let row = document.getElementById(`empresa-${empresaId}`);
+            
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Esta acción eliminará la empresa de forma permanente.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#007bff",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/eliminar_empresa/${empresaId}/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire("Eliminado", "La empresa ha sido eliminada correctamente.", "success");
+                            row.remove(); // Elimina la fila de la tabla
+                        } else {
+                            Swal.fire("Error", "No se pudo eliminar la empresa.", "error");
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire("Error", "Hubo un problema al eliminar la empresa.", "error");
+                    });
+                }
+            });
+        });
+    });
+});
+</script>
+
+{% endblock content %}

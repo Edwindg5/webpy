@@ -1,0 +1,101 @@
+/* Reseteo de márgenes y uso de todo el viewport */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor principal para centrar el formulario */
+.form-container {
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(115, 115, 115, 0.2);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Títulos con mejor diseño */
+h1, h2 {
+    color: #7e7e7e;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Contenedor de los campos del formulario */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* Etiquetas de los campos */
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 5px;
+}
+
+/* Campos de entrada y textarea */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Efecto al enfocar los campos */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Botón de enviar */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #007bff;
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn-submit:hover {
+    background: #0056b3;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Diseño responsive */
+@media (max-width: 600px) {
+    .form-container {
+        width: 95%;
+        padding: 20px;
+    }
+}

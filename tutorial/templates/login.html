@@ -1,20 +1,33 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<div class="login-container">
+    <img src="{% static 'img/user-icon.png' %}" alt="Usuario" class="user-img">
+    <h2>Iniciar sesión</h2>
+    
     {% if form.errors %}
-        <div>Error en el usuario o contraseña</div>
+        <div class="error-message">Usuario o contraseña incorrectos</div>
     {% endif %}
 
-    <form method="post" action="{% url 'login' %}">
+    <form method="post" action="{% url 'login' %}" class="login-form">
         {% csrf_token %}
-        <div>
-            <label>Usuario</label>
+        
+        <div class="input-group">
+            <label for="id_username">Usuario</label>
             {{ form.username }}
         </div>
-        <div>
-            <label>Contraseña</label>
+        
+        <div class="input-group">
+            <label for="id_password">Contraseña</label>
             {{ form.password }}
         </div>
-        <button type="submit">Ingresar</button>
+        
+        <button type="submit" class="btn-login">Ingresar</button>
     </form>
+</div>
 {% endblock content %}
