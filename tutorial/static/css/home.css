@@ -2,8 +2,8 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #211f71;
-    color: #333;
+    background-color: #e6e6e6; /* Un gris claro */
+    color: #444; /* Un gris oscuro pero no negro */
 }
 
 /* Hero Section */
@@ -19,12 +19,12 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: white;
+    color: #f5f5f5; /* Blanco grisáceo */
     padding: 20px;
     position: relative;
 }
 
-/* Capa de opacidad para la imagen de fondo */
+/* Capa de opacidad */
 .hero::before {
     content: "";
     position: absolute;
@@ -32,25 +32,28 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Ajusta el último valor (0.5) para más o menos transparencia */
+    background: rgba(30, 30, 30, 0.6); /* Gris oscuro con más transparencia */
 }
 
-/* Asegurar que el contenido esté encima de la capa de opacidad */
+/* Contenido encima de la capa */
 .hero * {
     position: relative;
     z-index: 1;
 }
 
-
 .hero h1 {
     font-size: 3rem;
     font-weight: bold;
+    color: #e0e0e0; /* Blanco apagado */
 }
 .hero p {
     font-size: 1.2rem;
     max-width: 600px;
     margin-top: 15px;
+    color: #d1d1d1; /* Un gris muy claro */
 }
+
+/* Botones */
 .hero .buttons {
     margin-top: 20px;
 }
@@ -63,18 +66,18 @@ body {
     font-size: 1rem;
 }
 .hero .btn-white {
-    background: white;
-    color: #2563eb;
+    background: #f0f0f0; /* Gris claro en lugar de blanco puro */
+    color: #333; /* Un gris oscuro */
 }
 .hero .btn-dark {
-    background: #111;
-    color: white;
+    background: #444; /* Un gris más neutro */
+    color: #f5f5f5;
 }
 .hero .btn-white:hover {
-    background: #ddd;
+    background: #d9d9d9;
 }
 .hero .btn-dark:hover {
-    background: #333;
+    background: #555;
 }
 
 /* Info Sections */
@@ -84,11 +87,11 @@ body {
     align-items: center;
     flex-wrap: wrap;
     padding: 50px;
-    background: #f9f9f9;
+    background: #d9d9d9; /* Un gris intermedio */
     width: 94%;
 }
 .info-box {
-    background: white;
+    background: #f0f0f0;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -100,13 +103,14 @@ body {
     justify-content: center;
 }
 .info-box h3 {
-    color: #2563eb;
+    color: #555; /* Gris oscuro */
     font-size: 1.5rem;
 }
 
 /* Testimonials Section */
 .testimonials {
-    background: white;
+    color: #3a3a3a;
+    background: #b5b5b5; /* Un gris más claro */
     padding: 50px;
     text-align: center;
     width: 94%;
@@ -114,6 +118,7 @@ body {
 .testimonials h2 {
     font-size: 2rem;
     margin-bottom: 20px;
+    color: #222; /* Casi negro pero no completamente */
 }
 .testimonial-cards {
     display: flex;
@@ -122,7 +127,7 @@ body {
     gap: 20px;
 }
 .testimonial-card {
-    background: white;
+    background: #e0e0e0;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -131,12 +136,13 @@ body {
 }
 .testimonial-card p {
     font-style: italic;
+    color: #555;
 }
 
 /* CTA Section */
 .cta {
-    background: #ffffff;
-    color: rgb(67, 67, 67);
+    background: #f0f0f0;
+    color: #333;
     text-align: center;
     padding: 50px;
     width: 94%;
@@ -151,16 +157,16 @@ body {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
-    background: white;
-    color: #2563eb;
+    background: #f5f5f5;
+    color: #333;
 }
 .cta button:hover {
-    background: #ddd;
+    background: #d9d9d9;
 }
 
 /* Footer */
 footer {
-    background: #5b5b5b;
+    background: #7a7a7a;
     color: white;
     text-align: center;
     padding: 20px;

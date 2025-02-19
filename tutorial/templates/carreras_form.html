@@ -17,7 +17,11 @@
             {{ form.descripcion.label_tag }}
             {{ form.descripcion }}
         </div>
+        {% if has_permission %}
         <button type="submit" class="btn-submit">Guardar</button>
+        {% else %}
+        <button type="submit" class="btn-submit">Guardar</button>
+        {% endif %}
     </form>
 </div>
 

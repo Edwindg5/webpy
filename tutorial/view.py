@@ -6,7 +6,7 @@ from .models import Carrera
 from django.views import View
 from .vistas import CarreraForm
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from tutorial.forms.profesor_form import ProfesorForm
@@ -15,6 +15,7 @@ from tutorial.forms.empresa_form import EmpresaForm
 from tutorial.models import Empresa
 from django.views.generic import ListView
 from tutorial.models.empresa import Empresa
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls ollaaa.")
@@ -51,7 +52,7 @@ class AboutPageView(TemplateView):
         context["lista"] = Carrera.objects.all()  # Ahora se envían las carreras a about.html
         return context
 
-
+#@method_decorator(permission_required('tutorial.add_carrera', login_url='/', raise_exception=False), name='dispatch')
 class CarreraCreateViewPage(TemplateView):
     template_name = 'carreras_form.html'
     model = Carrera
@@ -71,12 +72,13 @@ class CarreraCreateViewPage(TemplateView):
 
 class CarreraEditViewPage(TemplateView):
     template_name = 'carreras_form.html'
+    
     def get(self, request, pk, *args, **kwargs):
         carrera=get_object_or_404(Carrera, pk=pk)
         form = CarreraForm(instance=carrera)
         context={'form':form}
-        return self.render_to_response(context)
-    
+        return self.render_to_response({'form':form, 'has_permission': request.user.has_perm('change_carrera')})
+    @method_decorator(permission_required('tutorial.change_carrera', login_url='/', raise_exception=False), name='dispatch')
     def post(self, request, pk, *args, **kwargs):
         carrera=get_object_or_404(Carrera, pk=pk)
         form = CarreraForm(request.POST, instance=carrera)
