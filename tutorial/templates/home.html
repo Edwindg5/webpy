@@ -69,6 +69,16 @@
     <button>Empezar ahora</button>
 </section>
 
+<script>
+    console.log('ws://' + window.location.host + '/ws/somepath/ \n');
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/somepath/');
+
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        console.log('ws://' + window.location.host + '/ws/somepath/ \n'+data.message);
+    };
+</script>
+
 <!-- Footer -->
 <footer>
     <p>© 2025 Up Chiapas. Todos los derechos reservados.</p>

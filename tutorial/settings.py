@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tutorial',
+    'channels',
+ 
+    
+    
     
 ]
 
@@ -74,6 +78,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tutorial.wsgi.application'
+ASGI_APPLICATION = 'tutorial.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer'
+    }
+}
 
 
 # Database
@@ -91,7 +102,8 @@ DATABASES = {
 
 LOGIN_REDIRECT_URL='/'
 LOGOUT_REDIRECT_URC='/login/'
-LOGIN_URL='/login/'
+LOGOUT_REDIRECT_URL='/login/'
+
 
 
 
