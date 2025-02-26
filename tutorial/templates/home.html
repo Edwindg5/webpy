@@ -5,59 +5,43 @@
 
 {% block content %}
 
-
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
-
 
 <!-- Hero Section -->
 <section class="hero">
     <h1>Bienvenido a la Sala Navigator</h1>
-    <p>
-        Registra las empresas con convenios que tengas.
-    </p>
+    <p>Registra las empresas con convenios que tengas.</p>
     <div class="buttons">
         <a href="{% url 'ver_empresa' %}">
             <button class="btn-white">Ver Empresas</button>
         </a>
-        
         <a href="{% url 'registrar_empresa' %}" class="btn-dark">Registra tu Empresa</a>
-
     </div>
-    <p class="small-text">Debes de iniciar sesion para registrar tu empresa, en  la parte superior derecha se encuntra el boton de iniciar sesion</p>
+    <p class="small-text">Debes de iniciar sesión para registrar tu empresa.</p>
+</section>
+
+<!-- Carreras Section -->
+<section class="carreras">
+    <h2>Lista de Carreras</h2>
+    <div id="carreras-container">
+        <p>Cargando carreras...</p>
+    </div>
 </section>
 
 <!-- Info Sections -->
 <section class="info-sections">
-    <div class="info-box">
-        <h3>Segmentar</h3>
-        <p>Encuentra a las empresas y a las personas adecuadas.</p>
-    </div>
-    <div class="info-box">
-        <h3>Entender</h3>
-        <p>Acompaña actualizaciones importantes de empresas y posibles clientes.</p>
-    </div>
-    <div class="info-box">
-        <h3>Interactuar</h3>
-        <p>Comunícate e interactúa con tus posibles clientes.</p>
-    </div>
+    <div class="info-box"><h3>Segmentar</h3><p>Encuentra a las empresas y a las personas adecuadas.</p></div>
+    <div class="info-box"><h3>Entender</h3><p>Acompaña actualizaciones importantes.</p></div>
+    <div class="info-box"><h3>Interactuar</h3><p>Comunícate con tus posibles clientes.</p></div>
 </section>
 
 <!-- Testimonials Section -->
 <section class="testimonials">
     <h2>Lo que dicen nuestros usuarios</h2>
-    <p class="subtext">Testimonios de clientes que han potenciado su negocio con Sales Navigator.</p>
     <div class="testimonial-cards">
         <div class="testimonial-card">
-            <p>"Sales Navigator ha sido clave en nuestra estrategia de ventas, nos ha permitido encontrar clientes más fácilmente."</p>
+            <p>"Sales Navigator ha sido clave en nuestra estrategia de ventas."</p>
             <h4>— Juan Pérez, CEO de Empresa X</h4>
-        </div>
-        <div class="testimonial-card">
-            <p>"Con LinkedIn Sales Navigator hemos incrementado nuestra tasa de conversión en un 30%."</p>
-            <h4>— María López, Directora de Ventas</h4>
-        </div>
-        <div class="testimonial-card">
-            <p>"Nos ha permitido contactar con clientes de alto perfil que antes parecían inalcanzables."</p>
-            <h4>— Carlos Ramírez, Gerente de Desarrollo</h4>
         </div>
     </div>
 </section>
@@ -70,16 +54,32 @@
 </section>
 
 <script>
-    console.log('ws://' + window.location.host + '/ws/somepath/ \n');
+    const carrerasContainer = document.getElementById("carreras-container");
     const socket = new WebSocket('ws://' + window.location.host + '/ws/somepath/');
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        console.log('ws://' + window.location.host + '/ws/somepath/ \n'+data.message);
+        carrerasContainer.innerHTML = '';  // Limpia el contenedor
+        if (data.message.length > 0) {
+            data.message.forEach(carrera => {
+                const carreraDiv = document.createElement('div');
+                carreraDiv.classList.add('carrera-card');
+                carreraDiv.innerHTML = `
+                    <h3>${carrera.nombre}</h3>
+                    <p>${carrera.descripcion}</p>
+                `;
+                carrerasContainer.appendChild(carreraDiv);
+            });
+        } else {
+            carrerasContainer.innerHTML = '<p>No hay carreras registradas.</p>';
+        }
+    };
+
+    socket.onopen = function() {
+        socket.send(JSON.stringify({ action: "get_carreras" }));
     };
 </script>
 
-<!-- Footer -->
 <footer>
     <p>© 2025 Up Chiapas. Todos los derechos reservados.</p>
 </footer>

@@ -100,9 +100,8 @@ DATABASES = {
     }
 }
 
-LOGIN_REDIRECT_URL='/'
-LOGOUT_REDIRECT_URC='/login/'
-LOGOUT_REDIRECT_URL='/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 
@@ -146,7 +145,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
     r"C:\Users\edwin\OneDrive\Documentos\cuatri5\cliser\trabajoc1\tutorial\tutorial\static",
 ]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
