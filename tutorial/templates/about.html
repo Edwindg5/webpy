@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% load static %}
 
 {% block title %}Carreras{% endblock title %}
@@ -6,13 +6,12 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/carreras.css' %}?v=2">
 
-
 <h1 class="title-lista">Lista de Carreras Registradas</h1>
 
 <div class="carreras-container">
-    <ul>
+    <ul id="lista-carreras">
         {% for item in lista %}
-            <li>{{ item }}
+            <li data-id="{{ item.pk }}">{{ item }}
                 <a href="{% url 'carreras_editar' item.pk %}">Editar</a>
                 <a href="#" class="eliminar-carrera" data-url="{% url 'carreras_eliminar' item.pk %}" data-id="{{ item.pk }}">Eliminar</a>
             </li>
@@ -23,6 +22,40 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Configuración WebSocket para actualizaciones en tiempo real
+        const socket = new WebSocket("ws://{{ request.get_host }}/ws/about/");
+        
+        socket.onopen = function(event) {
+            console.log("Conectado al WebSocket para actualizaciones en tiempo real");
+        };
+
+        socket.onmessage = function(event) {
+            try {
+                const data = JSON.parse(event.data);
+                const carreras = Array.isArray(data) ? data : (data.carreras || []);
+                
+                // Actualizar solo si hay cambios - aquí podrías implementar lógica más sofisticada
+                console.log("Datos recibidos vía WebSocket:", carreras);
+                
+                // Ejemplo de actualización simple - reemplazar lista completa
+                // En una implementación real, podrías comparar con los elementos existentes
+                // y solo actualizar lo necesario
+                if (carreras.length > 0) {
+                    actualizarListaCarreras(carreras);
+                }
+            } catch (error) {
+                console.error("Error procesando datos WebSocket:", error);
+            }
+        };
+
+        function actualizarListaCarreras(carreras) {
+            // Esta función necesitaría adaptarse a tu formato específico de HTML
+            // y cómo se renderizan los elementos de la lista en tu template
+            console.log("Se actualizaría la lista con:", carreras);
+            // Implementación dependerá de cómo quieras manejar las actualizaciones
+        }
+        
+        // Código existente para eliminar carreras
         document.querySelectorAll(".eliminar-carrera").forEach(button => {
             button.addEventListener("click", function (event) {
                 event.preventDefault();
@@ -64,6 +97,5 @@
             });
         });
     });
-    </script>
-    
+</script>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}  {# Usa la plantilla base si tienes una #}
+
+{% block title %}Batallas{% endblock %}
+
+{% block content %}
+<h1>Bienvenido a la sección de Batallas</h1>
+<p>Esta es la vista de batallas, donde podrás gestionar las batallas disponibles.</p>
+
+<a href="{% url 'home' %}" class="btn">Volver al Inicio</a>
+{% endblock %}

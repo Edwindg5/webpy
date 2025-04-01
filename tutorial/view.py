@@ -1,4 +1,4 @@
-#tutorial/views.py
+#tutorial/view.py
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
@@ -15,10 +15,13 @@ from tutorial.forms.empresa_form import EmpresaForm
 from tutorial.models import Empresa
 from django.views.generic import ListView
 from tutorial.models.empresa import Empresa
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls ollaaa.")
+
 
 class HomePageView(TemplateView):
     template_name = 'home.html'
@@ -28,7 +31,43 @@ class HomePageView(TemplateView):
         context['my_name'] = 'Bienvenido a la plataforma de Carreras'
         context["lista"] = Carrera.objects.all()  # Se usa Carrera.objects.all()
         return context
+    
+    
+class BatallasPageView(TemplateView):
+    template_name = "batallas.html"
+
 class ProfesorCreateView(TemplateView):
+    template_name = "profesor_form.html"
+
+    def get(self, request, *args, **kwargs):
+        form = ProfesorForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = ProfesorForm(request.POST)
+        if form.is_valid():
+            profesor = form.save()
+
+            # Enviar datos del profesor a WebSocket
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                "profesores_updates",
+                {
+                    "type": "profesores_update",
+                    "message": {
+                        "id": profesor.id,
+                        "nombre": profesor.nombre,
+                        "apellido": profesor.apellido,
+                        "email": profesor.email,
+                        "telefono": profesor.telefono,
+                        "especialidad": profesor.especialidad,
+                    }
+                }
+            )
+
+            return JsonResponse({"success": True, "message": "Profesor registrado correctamente."})
+        
+        return JsonResponse({"success": False, "message": "Error al registrar el profesor."}, status=400)
     template_name = "profesor_form.html"
 
     def get(self, request, *args, **kwargs):
@@ -49,9 +88,25 @@ class AboutPageView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["lista"] = Carrera.objects.all()  # Ahora se envían las carreras a about.html
+        carreras = Carrera.objects.all()
+        context["lista"] = carreras
+
+        # Enviar datos de carreras a través de WebSocket
+        self.enviar_carreras_websocket(carreras)
+
         return context
 
+    def enviar_carreras_websocket(self, carreras):
+        channel_layer = get_channel_layer()
+        data = [{'nombre': c.nombre, 'descripcion': c.descripcion} for c in carreras]
+
+        async_to_sync(channel_layer.group_send)(
+            "carreras_group",
+            {
+                "type": "enviar_carreras",
+                "message": data
+            }
+        )
 #@method_decorator(permission_required('tutorial.add_carrera', login_url='/', raise_exception=False), name='dispatch')
 class CarreraCreateViewPage(TemplateView):
     template_name = 'carreras_form.html'

@@ -54,30 +54,34 @@
 </section>
 
 <script>
-    const carrerasContainer = document.getElementById("carreras-container");
-    const socket = new WebSocket('ws://' + window.location.host + '/ws/somepath/');
+ const carrerasContainer = document.getElementById("carreras-container");
+const socket = new WebSocket('ws://' + window.location.host + '/ws/somepath/');
 
-    socket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        carrerasContainer.innerHTML = '';  // Limpia el contenedor
-        if (data.message.length > 0) {
-            data.message.forEach(carrera => {
-                const carreraDiv = document.createElement('div');
-                carreraDiv.classList.add('carrera-card');
-                carreraDiv.innerHTML = `
-                    <h3>${carrera.nombre}</h3>
-                    <p>${carrera.descripcion}</p>
-                `;
-                carrerasContainer.appendChild(carreraDiv);
-            });
-        } else {
-            carrerasContainer.innerHTML = '<p>No hay carreras registradas.</p>';
-        }
-    };
+socket.onopen = function() {
+    // Enviar datos para guardar en la BD una vez abierto el socket
+    socket.send(JSON.stringify({ nombre: 'admo', descripcion: '***' }));
+};
 
-    socket.onopen = function() {
-        socket.send(JSON.stringify({ action: "get_carreras" }));
-    };
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    carrerasContainer.innerHTML = '';  // Limpia el contenedor
+    if (data.message && Array.isArray(data.message) && data.message.length > 0) {
+        data.message.forEach(carrera => {
+            const carreraDiv = document.createElement('div');
+            carreraDiv.classList.add('carrera-card');
+            carreraDiv.innerHTML = `
+                <h3>${carrera.nombre}</h3>
+                <p>${carrera.descripcion}</p>
+            `;
+            carrerasContainer.appendChild(carreraDiv);
+        });
+    } else if (data.message) {
+        carrerasContainer.innerHTML = `<p>${data.message}</p>`;
+    } else {
+        carrerasContainer.innerHTML = '<p>No hay carreras registradas.</p>';
+    }
+};
+
 </script>
 
 <footer>

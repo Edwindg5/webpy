@@ -1,51 +1,55 @@
-{% extends 'base.html' %}
-{% load static %}
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/carreras_form.css' %}">
-
-<div class="form-container">
-    <h1>Agregar Nueva Carrera</h1>
-
-    <form id="carrera-form" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.nombre.label_tag }}
-            {{ form.nombre }}
-        </div>
-        <div class="form-group">
-            {{ form.descripcion.label_tag }}
-            {{ form.descripcion }}
-        </div>
-        {% if has_permission %}
-        <button type="submit" class="btn-submit">Guardar</button>
-        {% else %}
-        <button type="submit" class="btn-submit">Guardar</button>
-        {% endif %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Carreras</title>
+</head>
+<body>
+    <h2>Registrar Nueva Carrera</h2>
+    <form id="carrera-form">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required>
+        <br>
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" required>
+        <br>
+        <button type="submit">Registrar</button>
     </form>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("carrera-form").addEventListener("submit", function (event) {
-        event.preventDefault();
-        
-        Swal.fire({
-            title: "¿Estás seguro?",
-            text: "Se guardará la nueva carrera en la base de datos.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#007bff",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Sí, guardar",
-            cancelButtonText: "Cancelar"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
+    <h2>Lista de Carreras</h2>
+    <ul id="carrera-lista"></ul>
+
+    <script>
+        var socket = new WebSocket("ws://127.0.0.1:8000/ws/somepath/");
+
+        socket.onmessage = function(event) {
+            var data = JSON.parse(event.data);
+            if (data.message) {
+                actualizarCarreras(data.message);
+            }
+        };
+
+        document.getElementById("carrera-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var nombre = document.getElementById("nombre").value;
+            var descripcion = document.getElementById("descripcion").value;
+            
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({ nombre: nombre, descripcion: descripcion }));
             }
         });
-    });
-});
-</script>
-{% endblock content %}
+
+        function actualizarCarreras(carreras) {
+            let lista = document.getElementById("carrera-lista");
+            lista.innerHTML = "";
+            
+            carreras.forEach(carrera => {
+                let item = document.createElement("li");
+                item.innerText = `${carrera.nombre} - ${carrera.descripcion}`;
+                lista.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>
